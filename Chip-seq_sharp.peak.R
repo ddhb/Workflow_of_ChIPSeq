@@ -81,10 +81,10 @@ trimmed_control = paste(strsplit(Control_filename, ".fastq.gz")[[1]],"_trimmed.f
 trimmed_case = paste(strsplit(Case_filename, ".fastq.gz")[[1]],"_trimmed.fastq.gz",sep="")
 
 ## Step 3-2. Fastq filtering
-fastqFilter(fn=download_filename_Control, fout=trimmed_control, 
+fastqFilter(fn=Control_filename, fout=trimmed_control, 
             truncQ = 2, truncLen = 0, trimLeft = 0, maxN=0, minQ=0, maxEE=Inf,
             rm.phix=FALSE, n=1e+06, compress = TRUE, verbose=FALSE)
-fastqFilter(fn=download_filename_Case, fout=trimmed_case, 
+fastqFilter(fn=Case_filename, fout=trimmed_case, 
             truncQ = 2, truncLen = 0, trimLeft = 0, maxN=0, minQ=0, maxEE=Inf,
             rm.phix=FALSE, n=1e+06, compress = TRUE, verbose=FALSE)
 
