@@ -29,12 +29,13 @@ biocLite("ChIPseeker")
 biocLite("TxDb.Hsapiens.UCSC.hg19.knownGene")
 biocLite("clusterProfiler")
 biocLite("ReactomePA")
+biocLite("dada2")
 
 ####################################################################
 ## Step 1 | Set the working directory and loading packages
 ####################################################################
-## Step 1-1. Set working directory if the path is 'K:/LAB4'. 
-## Unless please correct the working directory path.
+## Step 1-1. Set working directory if the path is 'K:/LAB4',
+## unless please correct the working directory path.
 working_dir="K:/LAB4"
 setwd(working_dir)
 
@@ -56,36 +57,50 @@ library("ChIPseeker")
 library("TxDb.Hsapiens.UCSC.hg19.knownGene")
 library("clusterProfiler")
 library("ReactomePA")
+library("dada2")
 
 ####################################################################
 ## (Optional) Step 2 | Downloading sample data from EBI (2.8GB and 1.5GB respectively) ## 30 minutes
 ####################################################################
-## Step 2-1. Assignment variables for downloading zipped fastq files.
-download_filename_Control = "Sample_data_control.fastq.gz"
-download_filename_Case = "Sample_data_case.fastq.gz"
+## Step 2-1. Assigning variables for downloading zipped fastq files.
+Control_filename = "Sample_data_control.fastq.gz"
+Case_filename = "Sample_data_case.fastq.gz"
 sample_control = "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR227/SRR227391/SRR227391.fastq.gz"
 sample_chip = "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR227/SRR227441/SRR227441.fastq.gz"
 
 ## Step 2-2. Start download file with internal method from EBI.
-download.file(sample_control, destfile=download_filename_Control, method="internal")
-download.file(sample_chip, destfile=download_filename_Case, method="internal")
+download.file(sample_control, destfile=Control_filename, method="internal")
+download.file(sample_chip, destfile=Case_filename, method="internal")
+
+
+####################################################################
+## Step 3 | Trimming ## 25 minutes
+####################################################################
+## Step 3-1. Assigning variblaes for pre-processing
+trimmed_control = paste(strsplit(Control_filename, ".fastq.gz")[[1]],"_trimmed.fastq.gz",sep="")
+trimmed_case = paste(strsplit(Case_filename, ".fastq.gz")[[1]],"_trimmed.fastq.gz",sep="")
+
+## Step 3-2. Fastq filtering
+fastqFilter(fn=download_filename_Control, fout=trimmed_control, 
+            truncQ = 2, truncLen = 0, trimLeft = 0, maxN=0, minQ=0, maxEE=Inf,
+            rm.phix=FALSE, n=1e+06, compress = TRUE, verbose=FALSE)
+fastqFilter(fn=download_filename_Case, fout=trimmed_case, 
+            truncQ = 2, truncLen = 0, trimLeft = 0, maxN=0, minQ=0, maxEE=Inf,
+            rm.phix=FALSE, n=1e+06, compress = TRUE, verbose=FALSE)
 
 ####################################################################
 ## Step 3 | Align to reference genome # 1.2 hours using 7 cores
 ##        | Recommend to start at this point
 ####################################################################
-## Step 3-1. Assignment variables for alignment to hg19 reference genome
-filename_Control = strsplit(download_filename_Control, ".fastq.gz")[[1]]
-filename_Case = strsplit(download_filename_Case, ".fastq.gz")[[1]]
+## Step 3-1. Selecting reference genome, hg19
 controlFile <- "sample_control.txt"
-genomeFile <- "BSgenome.Hsapiens.UCSC.hg19"
 caseFile <- "sample_Case.txt"
 genomeFile <- "BSgenome.Hsapiens.UCSC.hg19"
 
 ## Step 3-2. Making a matrix file sample and control each other to use qAlign function. Please refer the "sample_*.txt" file in GitHub
-Matrix_file_control <- matrix(c("FileName",download_filename_Control,"SampleName","Sample1"),nrow=2,ncol=2)
+Matrix_file_control <- matrix(c("FileName",trimmed_control,"SampleName","Sample1"),nrow=2,ncol=2)
 write.table(Matrix_file_control, file="sample_control.txt", sep="\t",row.names=FALSE, col.names=FALSE)
-Matrix_file_case <- matrix(c("FileName",download_filename_Case,"SampleName","Sample1"),nrow=2,ncol=2)
+Matrix_file_case <- matrix(c("FileName",trimmed_case,"SampleName","Sample1"),nrow=2,ncol=2)
 write.table(Matrix_file_case, file="sample_Case.txt", sep="\t",row.names=FALSE, col.names=FALSE)
 
 ## Step 3-3. Assigning core and aligning to hg19 reference genome
@@ -105,6 +120,8 @@ file.remove(caseFile)
 ## Step 4 | Quality check ## 1.2 hours using 7 cores
 ####################################################################
 ## Step 4-1. The QC plotting of case and control files
+filename_Control = strsplit(trimmed_control, ".fastq.gz")[[1]]
+filename_Case = strsplit(trimmed_case, ".fastq.gz")[[1]]
 qQCReport(Aligned_control, pdfFilename = paste(filename_Control,"_QCReport.pdf",sep=""))
 qQCReport(Aligned_case, pdfFilename = paste(filename_Case,"_QCReport.pdf",sep=""))
 
@@ -171,7 +188,7 @@ plotAvgProf(tagMatrix, xlim=c(-3000, 3000),
             xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
 
 ## Step 6-4. Annotate peak and illustrate pie-plot & upset-plot
-peakAnno <- annotatePeak (header.eliminated.filename, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb="org.Hs.eg.db")
+peakAnno <- annotatePeak (header.eliminated.file, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb="org.Hs.eg.db")
 plotAnnoPie(peakAnno)
 upsetplot(peakAnno, vennpie=TRUE)
 
