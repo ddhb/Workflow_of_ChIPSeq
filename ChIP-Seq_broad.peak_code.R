@@ -97,7 +97,7 @@ controlFile <- "sample_control.txt"
 caseFile <- "sample_Case.txt"
 genomeFile <- "BSgenome.Hsapiens.UCSC.hg19"
 
-## Step 4-2. Making a matrix file sample and control each other to use qAlign function. Please refer the "sample_*.txt" file in GitHub
+## Step 4-2. Making a matrix file sample and control each other to use qAlign function.
 Matrix_file_control <- matrix(c("FileName",trimmed_control,"SampleName","Sample1"),nrow=2,ncol=2)
 write.table(Matrix_file_control, file="sample_control.txt", sep="\t",row.names=FALSE, col.names=FALSE)
 Matrix_file_case <- matrix(c("FileName",trimmed_case,"SampleName","Sample1"),nrow=2,ncol=2)
