@@ -112,7 +112,6 @@ Aligned_case<-qAlign(sampleFile=caseFile, genome=genomeFile,
                      clObj=cl, alignmentsDir = working_dir)
 
 ## Step 4-4. Post-processing (releasing core and removing temporal matrix files)
-stopCluster(cl)
 file.remove(controlFile)
 file.remove(caseFile)
 
@@ -122,9 +121,9 @@ file.remove(caseFile)
 ## Step 5-1. The QC plotting of case and control files
 filename_Control = strsplit(trimmed_control, ".fastq.gz")[[1]]
 filename_Case = strsplit(trimmed_case, ".fastq.gz")[[1]]
-qQCReport(Aligned_control, pdfFilename = paste(filename_Control,"_QCReport.pdf",sep=""))
-qQCReport(Aligned_case, pdfFilename = paste(filename_Case,"_QCReport.pdf",sep=""))
-
+qQCReport(Aligned_control, pdfFilename = paste(filename_Control,"_QCReport.pdf",sep=""), clObj=cl)
+qQCReport(Aligned_case, pdfFilename = paste(filename_Case,"_QCReport.pdf",sep=""), clObj=cl)
+stopCluster(cl)
 ## Step 5-2. Renaming aligned output files
 file.rename(list.files(pattern=paste("^",filename_Control,"(.*).bam$",sep="")), to=paste(filename_Control,".bam", sep=""))
 file.rename(list.files(pattern=paste("^",filename_Control,"(.*).bam.bai$",sep="")), to=paste(filename_Control,".bam.bai", sep=""))
