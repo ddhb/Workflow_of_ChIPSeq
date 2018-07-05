@@ -194,4 +194,6 @@ upsetplot(peakAnno, vennpie=TRUE)
 ## Step 7-5. Functional enrichment analysis and plotting
 gene <- seq2gene(peak, tssRegion=c(-1000,1000), flankDistance=3000, TxDb=txdb)
 pathway <- enrichPathway(gene)
+png(filename="Result_pathway.png", units="in", width=20, height=20, pointsize=12, res=500)
 dotplot(pathway)
+dev.off()
