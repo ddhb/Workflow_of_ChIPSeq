@@ -30,6 +30,8 @@ biocLite("TxDb.Hsapiens.UCSC.hg19.knownGene")
 biocLite("clusterProfiler")
 biocLite("ReactomePA")
 biocLite("dada2")
+biocLite("org.Hs.eg.db")
+
 
 ####################################################################
 ## Step 1 | Set the working directory and loading packages
@@ -58,6 +60,7 @@ library("TxDb.Hsapiens.UCSC.hg19.knownGene")
 library("clusterProfiler")
 library("ReactomePA")
 library("dada2")
+library("org.Hs.eg.db")
 
 ####################################################################
 ## (Optional) Step 2 | Downloading sample data from EBI (2.8GB and 1.5GB respectively) ## 45 minutes
