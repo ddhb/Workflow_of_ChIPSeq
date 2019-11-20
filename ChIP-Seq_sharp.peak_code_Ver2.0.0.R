@@ -1,36 +1,4 @@
-####################################################################
-## Please install the latest release of 'Microsoft R Open'. 
-## https://mran.microsoft.com/open/
-## Then, entering the commands.
-####################################################################
-
-####################################################################
-## Step 0 | Install the packages
-####################################################################
-## Step 0-1. Install bioconductor base program.
-source("https://bioconductor.org/biocLite.R")
-biocLite()
-
-## Step 0-2. Install each package.
-biocLite("BiocParallel")
-biocLite("parallel")
-biocLite("ShortRead")
-biocLite("RSQLite")
-biocLite("QuasR")
-biocLite("BSgenome")
-biocLite("Rsamtools")
-biocLite("rtracklayer")
-biocLite("GenomicFeatures")
-biocLite("Hmisc")
-biocLite("Gviz")
-biocLite("XML")
-biocLite("mosaics")
-biocLite("ChIPseeker")
-biocLite("TxDb.Hsapiens.UCSC.hg19.knownGene")
-biocLite("clusterProfiler")
-biocLite("ReactomePA")
-biocLite("dada2")
-biocLite("org.Hs.eg.db")
+405389
 
 
 ####################################################################
