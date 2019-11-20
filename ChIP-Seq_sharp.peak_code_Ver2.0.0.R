@@ -1,3 +1,37 @@
+####################################################################
+## Please install the latest release of 'Microsoft R Open'. 
+## https://mran.microsoft.com/open/
+## Then, entering the commands.
+####################################################################
+
+####################################################################
+## Step 0 | Install the packages
+####################################################################
+## Step 0-1. Install bioconductor base program.
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+## Step 0-2. Install each package.
+BiocManager::install("BiocParallel")
+BiocManager::install("parallel")
+BiocManager::install("ShortRead")
+BiocManager::install("RSQLite")
+BiocManager::install("QuasR")
+BiocManager::install("BSgenome")
+BiocManager::install("Rsamtools")
+BiocManager::install("rtracklayer")
+BiocManager::install("GenomicFeatures")
+BiocManager::install("Hmisc")
+BiocManager::install("Gviz")
+BiocManager::install("XML")
+BiocManager::install("mosaics")
+BiocManager::install("ChIPseeker")
+BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+BiocManager::install("clusterProfiler")
+BiocManager::install("ReactomePA")
+BiocManager::install("dada2")
+BiocManager::install("org.Hs.eg.db")
+
 
 ####################################################################
 ## Step 1 | Set the working directory and loading packages
